@@ -1,7 +1,7 @@
-from base_module import Module
+from .basemodule import BaseModule
 
 
-class Rolls(Module):
+class Rolls(BaseModule):
 
     def __init__(self):
-        pass
+        print("Rolls")

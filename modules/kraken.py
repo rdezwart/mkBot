@@ -1,7 +1,7 @@
-from base_module import Module
+from .basemodule import BaseModule
 
 
-class Kraken(Module):
+class Kraken(BaseModule):
 
     def __init__(self):
         pass

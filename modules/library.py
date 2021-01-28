@@ -1,7 +1,7 @@
-from base_module import Module
+from .basemodule import BaseModule
 
 
-class Library(Module):
+class Library(BaseModule):
 
     def __init__(self):
         pass

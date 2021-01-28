@@ -1,7 +1,7 @@
-from base_module import Module
+from .basemodule import BaseModule
 
 
-class Lewd(Module):
+class Lewd(BaseModule):
 
     def __init__(self):
         pass
