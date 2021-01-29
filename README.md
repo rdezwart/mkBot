@@ -9,6 +9,8 @@ sections and options:
 
 ```ini
 [bot]
+server = xyz
+port = xyz
 nick = xyz
 pass = xyz
 
