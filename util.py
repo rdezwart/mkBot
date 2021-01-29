@@ -5,7 +5,7 @@ def check_config(config: ConfigParser):
 
     print("Checking config file...")
 
-    if len(config.read("config.ini")) > 0:
+    if len(config.read("data/config.ini")) > 0:
         print("\tExists: True")
 
         if check_sections(config):
