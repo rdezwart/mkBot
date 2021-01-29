@@ -38,7 +38,15 @@ def check_sections(config: ConfigParser):
 
 
 def check_options(config: ConfigParser):
-    if not config.has_option("bot", "nick"):
+    if not config.has_option("bot", "server"):
+        print("\tOptions: False")
+        print("\nError: 'bot.server' option is missing.")
+        return False
+    elif not config.has_option("bot", "port"):
+        print("\tOptions: False")
+        print("\nError: 'bot.port' option is missing.")
+        return False
+    elif not config.has_option("bot", "nick"):
         print("\tOptions: False")
         print("\nError: 'bot.nick' option is missing.")
         return False
