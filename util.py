@@ -25,9 +25,9 @@ def check_config(config: ConfigParser):
 
 
 def check_sections(config: ConfigParser):
-    if not config.has_section("login"):
+    if not config.has_section("bot"):
         print("\tSections: False")
-        print("\nError: 'login' section is missing.")
+        print("\nError: 'bot' section is missing.")
         return False
     elif not config.has_section("esix"):
         print("\tSections: False")
@@ -38,13 +38,13 @@ def check_sections(config: ConfigParser):
 
 
 def check_options(config: ConfigParser):
-    if not config.has_option("login", "bot_nick"):
+    if not config.has_option("bot", "nick"):
         print("\tOptions: False")
-        print("\nError: 'login.bot_nick' option is missing.")
+        print("\nError: 'bot.nick' option is missing.")
         return False
-    elif not config.has_option("login", "bot_pass"):
+    elif not config.has_option("bot", "pass"):
         print("\tOptions: False")
-        print("\nError: 'login.bot_pass' option is missing.")
+        print("\nError: 'bot.pass' option is missing.")
         return False
 
     elif not config.has_option("esix", "agent"):
