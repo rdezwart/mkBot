@@ -23,7 +23,7 @@ key = xyz
 ## Channels
 
 To choose which channels to connect to, create a ``channels.ini`` in the [data](data) directory with the following
-structure.
+structure. You can add as many channels as you like.
 
 ```ini
 [#channelName01]
@@ -31,4 +31,5 @@ structure.
 [#channelName03]
 ```
 
-It can have as many channels as you like, but they must include a ``#`` at the beginning of the name. 
+Channel names should always start with ``#`` in accordance with IRC standards, but will be added if you neglect to
+include them in your file.
