@@ -9,10 +9,9 @@ class Controller:
     irc: ssl.SSLSocket
     socket: socket.socket
 
-    def __init__(self):
+    def __init__(self, config: ConfigParser):
         print("Initializing controller...")
-        self.config = ConfigParser()
-        self.config.read("data/config.ini")
+        self.config = config
 
         self.manager = Manager()
 
@@ -35,6 +34,15 @@ class Controller:
         self.send("NICK {0}".format(bot_nick))
         self.send("PASS {0}".format(bot_pass))
         self.irc.settimeout(1)
+
+    def join_channels(self):
+        chan_parser = ConfigParser()
+        chan_parser.read("data/channels.ini")
+        chan_list = chan_parser.sections()
+
+        for chan in chan_list:
+            clean_chan = "#{0}".format(chan.strip("#"))
+            self.send(clean_chan)
 
     def send(self, msg):
         if len(msg) > 1:
