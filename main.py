@@ -8,6 +8,6 @@ if __name__ == "__main__":
     if util.check_config(config):
         print("Config file OK.")
 
-        bot = Controller()
-        bot.connect()
-        bot.log_in()
+        bot = Controller(config)
+        # bot.connect()
+        # bot.log_in()
