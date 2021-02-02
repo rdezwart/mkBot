@@ -1,10 +1,22 @@
 from configparser import ConfigParser
+from functools import wraps
 
 command_prefix = '.'
 
 
-def check_config(config: ConfigParser):
+def cmd():
+    def cmd_decorator(func):
+        @wraps(func)
+        def cmd_wrapper(*args):
+            func(*args)
 
+        cmd_wrapper.__isCommand__ = True
+        return cmd_wrapper
+
+    return cmd_decorator
+
+
+def check_config(config: ConfigParser):
     print("Checking config file...")
 
     if len(config.read("data/config.ini")) > 0:
