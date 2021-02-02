@@ -9,5 +9,6 @@ if __name__ == "__main__":
         print("Config file OK.")
 
         bot = Controller(config)
-        # bot.connect()
-        # bot.log_in()
+        bot.connect()
+        bot.log_in()
+        bot.start_listening()

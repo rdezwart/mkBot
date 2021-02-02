@@ -1,5 +1,7 @@
 from configparser import ConfigParser
 
+command_prefix = '.'
+
 
 def check_config(config: ConfigParser):
 
