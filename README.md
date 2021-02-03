@@ -1,6 +1,6 @@
 # mkBot
 
-A multipurpose IRC bot. Catered towards members of the [KittensGame](https://bloodrizer.ru/games/kittens/) chatroom
+A multipurpose IRC bot. Generally catered towards members of the [KittensGame](https://bloodrizer.ru/games/kittens/) chatroom
 community, which in turn is part of the [Canternet IRC Network](https://canternet.org/).
 
 ## Info
