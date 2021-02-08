@@ -1,19 +1,6 @@
 from configparser import ConfigParser
-from functools import wraps
 
 command_prefix = '.'
-
-
-def cmd():
-    def cmd_decorator(func):
-        @wraps(func)
-        def cmd_wrapper(*args):
-            func(*args)
-
-        cmd_wrapper.__isCommand__ = True
-        return cmd_wrapper
-
-    return cmd_decorator
 
 
 def check_config(config: ConfigParser):
