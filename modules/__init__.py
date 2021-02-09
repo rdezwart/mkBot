@@ -1,3 +1,4 @@
+from .basemodule import BaseModule
 from .general import General
 from .kraken import Kraken
 from .lewd import Lewd
