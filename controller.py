@@ -51,14 +51,20 @@ class Controller:
         old_msg = ""
 
         while True:
-            msg = "{0}{1}".format(old_msg, self.pull_msg())
-            while "\r\n" in msg:
-                line = msg[:msg.index("\r\n")]
-                if line != "":
-                    print(line)
-                    self.process_msg(line)
-                msg = msg[msg.index("\r\n") + 2:]
-            old_msg = msg
+            new_msg = "{0}{1}".format(old_msg, self.pull_msg())
+            while "\r\n" in new_msg:
+                cln_msg = new_msg[:new_msg.index("\r\n")]
+                if cln_msg != "":
+                    self.process_msg(cln_msg)
+                new_msg = new_msg[new_msg.index("\r\n") + 2:]
+            old_msg = new_msg
+
+    def pull_msg(self):
+        try:
+            text = self.irc.recv(2040).decode("UTF-8")
+            return text
+        except socket.timeout:
+            return ""
 
     def push_msg(self, msg):
         if len(msg) > 1:
@@ -69,18 +75,11 @@ class Controller:
             if msg.count("\r\n") > 1:
                 print("Error: Too many messages at once.")
             else:
-                print(msg[:-2])
                 self.irc.send(bytes(msg, "UTF-8"))
+                if msg.split()[0] != "PONG":
+                    print(msg[:-2])
         else:
             print("Error: Invalid message.")
-
-    def pull_msg(self):
-        try:
-            text = self.irc.recv(2040).decode("UTF-8")
-        except socket.timeout:
-            return ""
-
-        return text
 
     def chat(self, channel, msg):
         self.push_msg("PRIVMSG {0} :{1}".format(channel, msg))
@@ -92,22 +91,14 @@ class Controller:
         if len(line) > 1:
             if line[0] == "PING":
                 self.push_msg("PONG {0}".format(code))
-            elif code == "396":
-                self.join_channels()
             else:
-                send_to = line[2]
-                if '#' not in send_to:
-                    send_to = line[0][1:]
+                print(msg)
+            if code == "396":
+                self.join_channels()
 
-                # check reload
-                self.check_reload(code, line, send_to)
-                try:
-                    pass
-                    # pass to manager
-                except:
-                    self.chat(send_to, "Error! Check your logs.")
-                    print(traceback.format_exc())
+            self.manager.parse(self, code, line)
 
+    # TODO: Move to general.py
     def check_reload(self, code, line, send_to):
         if len(line) > 3 and code == "PRIVMSG":
 
