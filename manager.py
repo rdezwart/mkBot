@@ -8,7 +8,6 @@ class Manager:
 
     def __init__(self):
         self.module_dict = {}
-        print("Manager")
         self.load_modules()
 
     # noinspection PyTypeChecker
@@ -32,13 +31,10 @@ class Manager:
 
     def parse(self, controller, code, line):
         if len(line) >= 3:
-
             source = line[0]
             send_to = line[2]
             if '#' not in send_to:
                 send_to = line[0][1:]
-
-            self.module_dict["general"].checkReload(controller, code, line, send_to)
 
             # noinspection PyBroadException
             try:

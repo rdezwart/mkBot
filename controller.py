@@ -1,11 +1,8 @@
-import importlib
 import socket
 import ssl
-import traceback
 from configparser import ConfigParser
 
 import manager
-import util
 
 
 class Controller:
@@ -86,28 +83,16 @@ class Controller:
 
     def process_msg(self, msg):
         line = msg.split()
-        code = line[1]
 
         if len(line) > 1:
+            code = line[1]
+
             if line[0] == "PING":
                 self.push_msg("PONG {0}".format(code))
             else:
                 print(msg)
+
             if code == "396":
                 self.join_channels()
 
             self.manager.parse(self, code, line)
-
-    # TODO: Move to general.py
-    def check_reload(self, code, line, send_to):
-        if len(line) > 3 and code == "PRIVMSG":
-
-            if line[3].lower() == ":{0}reload".format(util.command_prefix):
-                try:
-                    importlib.reload(manager)
-                    self.manager = manager.Manager()
-                except:
-                    self.chat(send_to, "Error! Check your logs.")
-                    print(traceback.format_exc())
-
-                self.chat(send_to, "Reloaded!")
