@@ -2,19 +2,25 @@ import importlib
 import traceback
 
 import modules
+from controller import Controller
 
 
 class Manager:
 
     def __init__(self):
+        """
+        Reloadable manager that parses and delegates commands to content modules.
+        """
         self.module_dict = {}
         self.load_modules()
 
     # noinspection PyTypeChecker
     def load_modules(self):
+        """
+        Reloads all content modules, and fills main dictionary.
+        """
         importlib.reload(modules)
         importlib.reload(modules.basemodule)
-
         importlib.reload(modules.general)
         importlib.reload(modules.kraken)
         importlib.reload(modules.lewd)
@@ -29,7 +35,14 @@ class Manager:
             "rolls": modules.rolls.Rolls()
         }
 
-    def parse(self, controller, code, line):
+    def parse(self, controller: Controller, code: str, line: list):
+        """
+        Parses additional information from an IRC message, then tries to send command to content modules.
+
+        :param controller: handler for IRC connection
+        :param code: numeric IRC code
+        :param line: list form of full IRC message
+        """
         if len(line) >= 3:
             source = line[0]
             send_to = line[2]

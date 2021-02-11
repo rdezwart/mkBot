@@ -10,12 +10,20 @@ class Controller:
     socket: socket.socket
 
     def __init__(self, config: ConfigParser):
+        """
+        Core engine of mkBot!
+
+        :param config: parser containing config data
+        """
         print("Initializing controller...")
         self.config = config
 
         self.manager = manager.Manager()
 
     def connect(self):
+        """
+        Pulls info from `data/config.ini` and connects to the specified IRC server.
+        """
         server: str = self.config["bot"]["server"]
         port: int = int(self.config["bot"]["port"])
 
@@ -27,6 +35,9 @@ class Controller:
         self.irc.connect((server, port))
 
     def log_in(self):
+        """
+        Pulls info from `data/config.ini` and sends login information.
+        """
         bot_nick = self.config["bot"]["nick"]
         bot_pass = self.config["bot"]["pass"]
 
@@ -36,6 +47,9 @@ class Controller:
         self.irc.settimeout(1)
 
     def join_channels(self):
+        """
+        Pulls info from `data/channels.ini` and connects to the specified channels.
+        """
         chan_parser = ConfigParser()
         chan_parser.read("data/channels.ini")
         chan_list = chan_parser.sections()
@@ -45,6 +59,11 @@ class Controller:
             self.push_msg("JOIN {0}".format(clean_chan))
 
     def start_listening(self):
+        """
+        Begins core loop for pulling and processing messages from IRC.
+
+        NOTE: Only call once.
+        """
         old_msg = ""
 
         while True:
@@ -56,14 +75,24 @@ class Controller:
                 new_msg = new_msg[new_msg.index("\r\n") + 2:]
             old_msg = new_msg
 
-    def pull_msg(self):
+    def pull_msg(self) -> str:
+        """
+        Tries to receive a message from the current IRC server.
+
+        :return: a message from IRC, if one exists
+        """
         try:
             text = self.irc.recv(2040).decode("UTF-8")
             return text
         except socket.timeout:
             return ""
 
-    def push_msg(self, msg):
+    def push_msg(self, msg: str):
+        """
+        Sends a message to the current IRC server.
+
+        :param msg: message to send to IRC
+        """
         if len(msg) > 1:
 
             if msg[-2:] != "\r\n":
@@ -78,11 +107,22 @@ class Controller:
         else:
             print("Error: Invalid message.")
 
-    def chat(self, channel, msg):
-        self.push_msg("PRIVMSG {0} :{1}".format(channel, msg))
+    def chat(self, send_to: str, msg: str):
+        """
+        Shortcut for sending a "PRIVMSG" to the current IRC server.
 
-    def process_msg(self, msg):
-        line = msg.split()
+        :param send_to: destination channel
+        :param msg: message to send to destination
+        """
+        self.push_msg("PRIVMSG {0} :{1}".format(send_to, msg))
+
+    def process_msg(self, msg: str):
+        """
+        Breaks down an IRC message into workable chunks, then sends it to the Manager for processing.
+
+        :param msg: message from IRC
+        """
+        line: list = msg.split()
 
         if len(line) > 1:
             code = line[1]
