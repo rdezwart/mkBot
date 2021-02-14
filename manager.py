@@ -1,16 +1,18 @@
 import importlib
 import traceback
+from configparser import ConfigParser
 
+import controller
 import modules
-from controller import Controller
 
 
 class Manager:
 
-    def __init__(self):
+    def __init__(self, _config: ConfigParser):
         """
         Reloadable manager that parses and delegates commands to content modules.
         """
+        self.config = _config
         self.module_dict = {}
         self.load_modules()
 
@@ -28,18 +30,18 @@ class Manager:
         importlib.reload(modules.rolls)
 
         self.module_dict = {
-            "general": modules.general.General(),
-            "kraken": modules.kraken.Kraken(),
-            "lewd": modules.lewd.Lewd(),
-            "library": modules.library.Library(),
-            "rolls": modules.rolls.Rolls()
+            "general": modules.general.General(self.config),
+            "kraken": modules.kraken.Kraken(self.config),
+            "lewd": modules.lewd.Lewd(self.config),
+            "library": modules.library.Library(self.config),
+            "rolls": modules.rolls.Rolls(self.config)
         }
 
-    def parse(self, controller: Controller, code: str, line: list):
+    def parse(self, cont: 'controller.Controller', code: str, line: list):
         """
         Parses additional information from an IRC message, then tries to send command to content modules.
 
-        :param controller: handler for IRC connection
+        :param cont: handler for IRC connection
         :param code: numeric IRC code
         :param line: list form of full IRC message
         """
@@ -53,7 +55,7 @@ class Manager:
             try:
                 for mod in self.module_dict:
                     m: modules.BaseModule = self.module_dict[mod]
-                    m.read(controller, source, code, send_to, line)
+                    m.read(cont, source, code, send_to, line)
             except Exception:
-                controller.chat(send_to, "Error! Check your logs.")
+                cont.chat(send_to, "Error! Check your logs.")
                 print(traceback.format_exc())

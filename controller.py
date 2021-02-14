@@ -9,16 +9,16 @@ class Controller:
     irc: ssl.SSLSocket
     socket: socket.socket
 
-    def __init__(self, config: ConfigParser):
+    def __init__(self, _config: ConfigParser):
         """
         Core engine of mkBot!
 
-        :param config: parser containing config data
+        :param _config: parser containing config data
         """
         print("Initializing controller...")
-        self.config = config
+        self.config = _config
 
-        self.manager = manager.Manager()
+        self.manager = manager.Manager(self.config)
 
     def connect(self):
         """
@@ -107,7 +107,7 @@ class Controller:
         else:
             print("Error: Invalid message.")
 
-    def chat(self, send_to: str, msg: str):
+    def chat(self, send_to: str, msg):
         """
         Shortcut for sending a "PRIVMSG" to the current IRC server.
 

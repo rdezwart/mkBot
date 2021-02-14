@@ -1,33 +1,44 @@
 import importlib
 import traceback
+from configparser import ConfigParser
 
+import controller
 import manager
-from controller import Controller
 from wrappers import cmd
 from .basemodule import BaseModule
 
 
 class General(BaseModule):
 
-    def __init__(self):
+    def __init__(self, _config: ConfigParser):
+        self.config = _config
+
+    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
         pass
 
-    def process(self, controller: Controller, source: str, code: str, send_to: str, line: list):
-        pass
+    # -- Commands -- #
 
     @cmd()
-    def test(self, controller: Controller, source: str, code: str, send_to: str, line: list):
-        controller.chat(send_to, "Delegation test!")
+    def test(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+        cont.chat(send_to, "Delegation test!")
 
     @cmd()
-    def reload(self, controller: Controller, source: str, code: str, send_to: str, line: list):
+    def raw(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+        if len(params) > 0:
+            cont.push_msg(" ".join(params))
+
+    @cmd()
+    def reload(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
         # noinspection PyBroadException
         try:
+            cont.manager.module_dict["lewd"].rule34.sessionClose()
+
             # noinspection PyTypeChecker
             importlib.reload(manager)
-            controller.manager = manager.Manager()
+            cont.manager = manager.Manager(cont.config)
+
         except Exception:
-            controller.chat(send_to, "Error! Check your logs.")
+            cont.chat(send_to, "Error! Check your logs.")
             print(traceback.format_exc())
 
-        controller.chat(send_to, "Reloaded!")
+        cont.chat(send_to, "Reloaded!")
