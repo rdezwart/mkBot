@@ -15,10 +15,10 @@ class Lewd(BaseModule):
     def __init__(self, _config: ConfigParser):
         self.config = _config
 
-        self.headers = {"User-Agent": self.config["esix"]["agent"]}
-        self.name = self.config["esix"]["name"]
-        self.key = self.config["esix"]["key"]
-        self.url = self.config["esix"]["url"]
+        self.headers = {"User-Agent": self.config.get("esix", "agent", raw=True)}
+        self.name = self.config.get("esix", "name", raw=True)
+        self.key = self.config.get("esix", "key", raw=True)
+        self.url = self.config.get("esix", "url", raw=True)
 
         self.rule34 = rule34.Sync()
 
@@ -73,11 +73,11 @@ class Lewd(BaseModule):
         try:
             posts = esix_get.json()["posts"]
             ret[0] = len(posts)
+
+            if ret[0] > 0:
+                ret[1] = posts[randint(0, len(posts) - 1)]["file"]["url"]
         except ValueError:
             ret[1] = "Error connecting to e621."
-
-        if ret[0] > 0:
-            ret[1] = posts[randint(0, len(posts) - 1)]["file"]["url"]
 
         return ret
 
@@ -88,10 +88,10 @@ class Lewd(BaseModule):
         try:
             posts = self.rule34.getImages(search)
             ret[0] = len(posts)
+
+            if ret[0] > 0:
+                ret[1] = posts[randint(0, len(posts) - 1)].file_url
         except Exception:
             ret[1] = "Error connected to rule34."
-
-        if ret[0] > 0:
-            ret[1] = posts[randint(0, len(posts) - 1)].file_url
 
         return ret

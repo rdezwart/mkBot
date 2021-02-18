@@ -5,7 +5,7 @@ import util
 from controller import Controller
 
 if __name__ == "__main__":
-    config = ConfigParser()
+    config = ConfigParser(interpolation=None)
     if util.check_config(config):
         print("Config file OK.")
         time.sleep(1)
