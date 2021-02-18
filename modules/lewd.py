@@ -22,13 +22,13 @@ class Lewd(BaseModule):
 
         self.rule34 = rule34.Sync()
 
-    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         pass
 
     # -- Commands -- #
 
     @cmd()
-    def lewd(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+    def lewd(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list[str]):
 
         spec = False
 

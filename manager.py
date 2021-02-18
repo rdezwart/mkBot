@@ -37,7 +37,7 @@ class Manager:
             "rolls": modules.rolls.Rolls(self.config)
         }
 
-    def parse(self, cont: 'controller.Controller', code: str, line: list):
+    def parse(self, cont: 'controller.Controller', code: str, line: list[str]):
         """
         Parses additional information from an IRC message, then tries to send command to content modules.
 

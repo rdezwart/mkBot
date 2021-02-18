@@ -10,11 +10,11 @@ class Kraken(BaseModule):
     def __init__(self, _config: ConfigParser):
         self.config = _config
 
-    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         pass
 
     # -- Commands -- #
 
     @cmd()
-    def kraken(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+    def kraken(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list[str]):
         cont.chat(send_to, "Not yet implemented.")

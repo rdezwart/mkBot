@@ -13,13 +13,13 @@ class Library(BaseModule):
         self.library = ConfigParser()
         self.library.read("data/library.ini")
 
-    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         pass
 
     # -- Commands -- #
 
     @cmd()
-    def lib(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+    def lib(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list[str]):
 
         if len(params) > 0:
             action = params[0].upper()

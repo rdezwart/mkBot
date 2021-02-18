@@ -13,22 +13,22 @@ class General(BaseModule):
     def __init__(self, _config: ConfigParser):
         self.config = _config
 
-    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         pass
 
     # -- Commands -- #
 
     @cmd()
-    def test(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+    def test(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list[str]):
         cont.chat(send_to, "Delegation test!")
 
     @cmd()
-    def raw(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+    def raw(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list[str]):
         if len(params) > 0:
             cont.push_msg(" ".join(params))
 
     @cmd()
-    def reload(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list):
+    def reload(self, cont: 'controller.Controller', source: str, code: str, send_to: str, params: list[str]):
         # noinspection PyBroadException
         try:
             cont.manager.module_dict["lewd"].rule34.sessionClose()

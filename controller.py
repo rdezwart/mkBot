@@ -122,7 +122,7 @@ class Controller:
 
         :param msg: message from IRC
         """
-        line: list = msg.split()
+        line: list[str] = msg.split()
 
         if len(line) > 1:
             code = line[1]

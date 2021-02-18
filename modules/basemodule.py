@@ -6,7 +6,7 @@ import util
 
 class BaseModule(ABC):
 
-    def read(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def read(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         """
         Base method for preparing commands.
 
@@ -20,7 +20,7 @@ class BaseModule(ABC):
         self.delegate(cont, source, code, send_to, line)
 
     @abstractmethod
-    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         """
         Abstract method for any additional processing before delegation.
 
@@ -32,7 +32,7 @@ class BaseModule(ABC):
         """
         pass
 
-    def delegate(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list):
+    def delegate(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
         """
         If a registered command (parsed from IRC message) exists in current content module, call it.
 
