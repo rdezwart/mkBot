@@ -1,3 +1,4 @@
+import traceback
 from configparser import ConfigParser, DuplicateSectionError
 
 import controller
@@ -10,7 +11,7 @@ class Library(BaseModule):
     def __init__(self, _config: ConfigParser):
         self.config = _config
 
-        self.library = ConfigParser()
+        self.library = ConfigParser(interpolation=None)
         self.library.read("data/library.ini")
 
     def process(self, cont: 'controller.Controller', source: str, code: str, send_to: str, line: list[str]):
@@ -33,15 +34,19 @@ class Library(BaseModule):
                     url = params[2]
 
                     if "://" not in old_section:
+                        # noinspection PyBroadException
                         try:
                             self.library.add_section(old_section)
                             if self.library.has_section(old_section):  # if added correctly
                                 self.library.set(old_section, "url", url)
                                 cont.chat(send_to, "{0} was added.".format(old_section))
+                            else:
+                                cont.chat(send_to, "Something went wrong.")
                         except DuplicateSectionError:  # if already exists
                             cont.chat(send_to, "Book already exists. Use SET to edit existing entry.")
-                        except ValueError:  # if default name
-                            cont.chat(send_to, "Can't have name of 'DEFAULT'")
+                        except Exception:
+                            print(traceback.format_exc())
+                            cont.chat(send_to, "ConfigParser error! Check your logs.")
                     else:
                         cont.chat(send_to, "Name can't be a URL.")
                 else:
